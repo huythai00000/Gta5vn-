@@ -1,0 +1,230 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LSPD | Cổng thông tin nhập vai</title>
+<style>
+:root{--navy:#101b32;--blue:#1c3764;--gold:#e7bd62;--paper:#f4f6fa;--ink:#172033;--muted:#667085}
+*{box-sizing:border-box}body{margin:0;font-family:Arial,Helvetica,sans-serif;background:var(--paper);color:var(--ink)}
+header{background:linear-gradient(120deg,#0b1428,#203d6d);color:#fff;padding:30px 18px 24px;text-align:center;border-bottom:4px solid var(--gold)}
+.logo{width:62px;height:62px;border:2px solid var(--gold);border-radius:50%;display:grid;place-items:center;margin:0 auto 12px;font-size:27px}
+header h1{margin:0;font-size:clamp(24px,5vw,36px);letter-spacing:2px}header p{margin:9px 0 0;color:#d9e2f2}
+nav{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;padding:12px;background:#fff;box-shadow:0 2px 10px #101b3212;position:sticky;top:0;z-index:3}
+nav a{color:var(--blue);text-decoration:none;font-weight:700;padding:9px 13px;border-radius:8px}nav a:hover{background:#edf2fa}
+main{max-width:1050px;margin:28px auto;padding:0 16px}
+.welcome{background:#fff;border:1px solid #e4e8ef;border-radius:14px;padding:22px;margin-bottom:20px}
+.welcome h2{margin:0 0 8px;color:var(--blue)}.welcome p{margin:0;color:var(--muted);line-height:1.55}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:15px}
+.card{background:#fff;border:1px solid #e1e6ef;border-radius:13px;padding:19px;box-shadow:0 5px 18px #14213b0a}
+.card .symbol{font-size:25px}.card h3{margin:10px 0 7px;color:var(--blue)}.card p{color:var(--muted);line-height:1.45;font-size:14px;min-height:40px}
+button,.action{border:0;background:var(--blue);color:white;padding:10px 14px;border-radius:8px;font-weight:700;cursor:pointer;text-decoration:none;display:inline-block}
+button:hover,.action:hover{background:#294d83}
+section{scroll-margin-top:80px;margin:28px 0}.section-head{display:flex;justify-content:space-between;align-items:end;gap:12px;flex-wrap:wrap;margin-bottom:13px}
+h2{color:var(--blue)}.search{padding:11px 13px;border:1px solid #cbd3df;border-radius:8px;min-width:min(100%,260px);font-size:15px}
+.levels{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px}
+.level{background:#fff;border:1px solid #e0e5ed;border-radius:12px;overflow:hidden}
+.level h3{margin:0;background:#f0f3f8;padding:13px 16px;color:var(--blue)}
+.meta{padding:11px 16px;background:#fff9e9;color:#76551a;font-weight:700;font-size:14px;line-height:1.6}
+.level ul{margin:0;padding:14px 18px 18px 35px;line-height:1.55}.level li{padding:3px 0}
+.note{background:#fff;border-left:4px solid var(--gold);padding:14px 16px;border-radius:7px;color:#596273;line-height:1.5}
+footer{text-align:center;padding:25px 16px;background:#101b32;color:#c8d2e3;margin-top:40px;font-size:13px}
+.hidden{display:none!important}
+@media(max-width:520px){header{padding-top:23px}nav a{font-size:13px;padding:8px}.welcome{padding:17px}}
+</style>
+</head>
+<body>
+
+<div id="loginScreen" style="position:fixed;inset:0;z-index:9999;background:linear-gradient(135deg,#0b1428,#203d6d);display:flex;align-items:center;justify-content:center;padding:20px">
+  <form id="loginForm" style="width:min(100%,390px);background:#fff;border-radius:18px;padding:26px;box-shadow:0 18px 55px #0005;text-align:center">
+    <div style="width:66px;height:66px;border:2px solid #e7bd62;border-radius:50%;display:grid;place-items:center;margin:0 auto 14px;background:#122344;color:#e7bd62;font-size:28px">★</div>
+    <h2 style="margin:0;color:#1c3764">ĐĂNG NHẬP LSPD</h2>
+    <p style="margin:8px 0 20px;color:#667085">Cổng thông tin Roleplay</p>
+    <label style="display:block;text-align:left;font-weight:700;color:#172033;margin:12px 0 6px">Tên tài khoản</label>
+    <input id="loginUsername" autocomplete="username" required placeholder="Nhập tên tài khoản" style="width:100%;padding:12px;border:1px solid #cbd3df;border-radius:9px;font-size:16px">
+    <label style="display:block;text-align:left;font-weight:700;color:#172033;margin:14px 0 6px">Mật khẩu</label>
+    <input id="loginPassword" type="password" autocomplete="current-password" required placeholder="Nhập mật khẩu" style="width:100%;padding:12px;border:1px solid #cbd3df;border-radius:9px;font-size:16px">
+    <button type="submit" style="width:100%;margin-top:20px;padding:13px;background:#1c3764;color:#fff;border:0;border-radius:9px;font-weight:700;font-size:16px">Đăng nhập</button>
+    <p id="loginError" style="color:#c62828;font-size:14px;min-height:18px;margin:12px 0 0"></p>
+    <p style="font-size:12px;color:#8a94a6;margin:10px 0 0">Người sáng lập: <strong>Huy Thái</strong></p>
+  </form>
+</div>
+
+<header>
+  <div class="logo">★</div>
+  <h1>LSPD</h1>
+  <p>CỔNG THÔNG TIN • GTAVN</p><p style="font-size:12px;margin-top:5px;color:#e7bd62">Người sáng lập: Huy Thái</p>
+</header>
+<nav>
+  <a href="#home">Trang chủ</a>
+  <a href="#forms">Biểu mẫu</a>
+  <a href="#levels">Danh mục vi phạm</a>
+  <a href="#rules">Quy định</a><button type="button" id="logoutButton" style="padding:8px 12px">Đăng xuất</button>
+</nav>
+<main>
+  <section id="home" class="welcome">
+    <h2>Chào mừng đến với cổng thông tin LSPD</h2>
+    <p>Trang tra cứu quy định và mức xử lý trong máy chủ nhập vai. Các mức thời gian bên dưới là quy ước của máy chủ, không phải hình phạt pháp luật ngoài đời.</p>
+  </section>
+
+  <section id="forms">
+    <div class="section-head"><h2>Biểu mẫu hỗ trợ</h2></div>
+    <div class="grid">
+      <article class="card"><div class="symbol">📋</div><h3>Hỗ trợ xử lý vi phạm</h3><p>Ghi nhận thông tin vụ việc và mức xử lý theo quy định máy chủ.</p><a class="action" href="#levels">Tra cứu mức xử lý</a></article>
+      <article class="card"><div class="symbol">🔎</div><h3>Thông tin truy nã</h3><p>Khu vực mẫu để quản lý hồ sơ nhân vật trong roleplay.</p><button onclick="alert('Bạn có thể gắn liên kết biểu mẫu của máy chủ tại đây.')">Mở biểu mẫu</button></article>
+      <article class="card"><div class="symbol">🛡️</div><h3>Yêu cầu bảo lãnh</h3><p>Khu vực mẫu để gửi yêu cầu xem xét theo luật máy chủ.</p><button onclick="alert('Bạn có thể gắn liên kết biểu mẫu của máy chủ tại đây.')">Mở biểu mẫu</button></article>
+    </div>
+  </section>
+
+  <section id="levels">
+    <div class="section-head"><h2>Danh mục vi phạm & mức xử lý</h2><input id="search" class="search" type="search" placeholder="Tìm tên vi phạm..." aria-label="Tìm tên vi phạm"></div>
+    <div class="note" id="calculator" style="margin-bottom:14px">
+      <strong>🧮 Tính tổng thời gian xử lý</strong>
+      <p style="margin:7px 0 10px">Chọn các tội danh bên dưới để cộng số phút theo cấp độ.</p>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:10px;margin:12px 0">
+        <label style="font-weight:700">Tên nhân vật
+          <input id="personName" type="text" placeholder="Nhập tên..." style="display:block;width:100%;margin-top:5px;padding:11px;border:1px solid #cbd3df;border-radius:8px;font-size:15px">
+        </label>
+        <label style="font-weight:700">CCCD nhân vật (RP)
+          <input id="personId" type="text" placeholder="Nhập CCCD..." style="display:block;width:100%;margin-top:5px;padding:11px;border:1px solid #cbd3df;border-radius:8px;font-size:15px">
+        </label>
+      </div>
+      <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+        <div><span id="totalMinutes" style="font-size:28px;font-weight:800;color:#1c3764">0</span> phút</div>
+        <span id="selectedCount">Đã chọn 0 tội danh</span>
+      </div>
+      <div id="copyPreview" style="white-space:pre-wrap;background:#f8f9ff;border:2px solid #cbd3ef;border-radius:10px;padding:14px;margin-top:13px;min-height:100px;font-size:14px;line-height:1.6">Tên:
+CCCD:
+Tội danh:
+Mức án: 0 phút
+Đã xử lý:</div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:12px">
+        <button type="button" id="copyCrime" style="background:#20c943;color:#08220e">Chỉ sao chép tội danh</button>
+        <button type="button" id="copyAll">Sao chép toàn bộ</button>
+        <button type="button" id="clearSelection" style="background:#c62828">Reset tội danh</button>
+      </div>
+      <p style="font-size:12px;color:#667085;margin:8px 0 0">Chỉ nhập thông tin nhân vật trong game/RP, không nhập CCCD thật.</p>
+    </div>
+    <div class="levels" id="levelList">
+      <article class="level" data-minutes="20" data-search="cấp độ 1 cản trở hỗ trợ gây rối trộm phá hoại">
+        <h3>Tội phạm cấp độ 1</h3><div class="meta">⏱ 20 phút • Được bảo lãnh • Tịch thu tang vật theo luật máy chủ</div>
+        <ul><li><label style="display:flex;gap:9px;align-items:flex-start;cursor:pointer"><input class="crime-check" type="checkbox" style="margin-top:4px;accent-color:#1c3764"><span>Cản trở người thi hành công vụ</span></label></li><li><label style="display:flex;gap:9px;align-items:flex-start;cursor:pointer"><input class="crime-check" type="checkbox" style="margin-top:4px;accent-color:#1c3764"><span>Hỗ trợ đồng bọn</span></label></li><li><label style="display:flex;gap:9px;align-items:flex-start;cursor:pointer"><input class="crime-check" type="checkbox" style="margin-top:4px;accent-color:#1c3764"><span>Không giao nộp tang vật theo quy định máy chủ</span></label></li><li><label style="display:flex;gap:9px;align-items:flex-start;cursor:pointer"><input class="crime-check" type="checkbox" style="margin-top:4px;accent-color:#1c3764"><span>Giả dạng người nhà nước</span></label></li><li><label style="display:flex;gap:9px;align-items:flex-start;cursor:pointer"><input class="crime-check" type="checkbox" style="margin-top:4px;accent-color:#1c3764"><span>Gây rối trật tự công cộng</span></label></li><li><label style="display:flex;gap:9px;align-items:flex-start;cursor:pointer"><input class="crime-check" type="checkbox" style="margin-top:4px;accent-color:#1c3764"><span>Gây rối trước trụ sở cơ quan</span></label></li><li><label style="display:flex;gap:9px;align-items:flex-start;cursor:pointer"><input class="crime-check" type="checkbox" style="margin-top:4px;accent-color:#1c3764"><span>Trộm cắp tài sản công dân</span></label></li><li><label style="display:flex;gap:9px;align-items:flex-start;cursor:pointer"><input class="crime-check" type="checkbox" style="margin-top:4px;accent-color:#1c3764"><span>Phá hoại tài sản nhà nước</span></label></li></ul>
+      </article>
+      <article class="level" data-minutes="30" data-search="cấp độ 2 nhập cư vu khống xúc phạm chống đối tàng trữ lừa đảo tấn công">
+        <h3>Tội phạm cấp độ 2</h3><div class="meta">⏱ 30 phút • Được bảo lãnh • Tịch thu tang vật theo luật máy chủ</div>
+        <ul><li><label style="display:flex;gap:9px;align-items:flex-start;cursor:pointer"><input class="crime-check" type="checkbox" style="margin-top:4px;accent-color:#1c3764"><span>Nhập cư trái phép</span></label></li><li><label style="display:flex;gap:9px;align-items:flex-start;cursor:pointer"><input class="crime-check" type="checkbox" style="margin-top:4px;accent-color:#1c3764"><span>Vu khống người khác</span></label></li><li><label style="display:flex;gap:9px;align-items:flex-start;cursor:pointer"><input class="crime-check" type="checkbox" style="margin-top:4px;accent-color:#1c3764"><span>Xúc phạm sĩ quan</span></label></li><li><label style="display:flex;gap:9px;align-items:flex-start;cursor:pointer"><input class="crime-check" type="checkbox" style="margin-top:4px;accent-color:#1c3764"><span>Chống đối người thi hành công vụ</span></label></li><li><label style="display:flex;gap:9px;align-items:flex-start;cursor:pointer"><input class="crime-check" type="checkbox" style="margin-top:4px;accent-color:#1c3764"><span>Lừa đảo chiếm đoạt tài sản</span></label></li><li><label style="display:flex;gap:9px;align-items:flex-start;cursor:pointer"><input class="crime-check" type="checkbox" style="margin-top:4px;accent-color:#1c3764"><span>Tấn công gây thương tích chưa nghiêm trọng</span></label></li><li><label style="display:flex;gap:9px;align-items:flex-start;cursor:pointer"><input class="crime-check" type="checkbox" style="margin-top:4px;accent-color:#1c3764"><span>Xâm nhập trụ sở trái phép</span></label></li></ul>
+      </article>
+      <article class="level" data-minutes="60" data-search="cấp độ 3 tấn công thương tích nghiêm trọng">
+        <h3>Tội phạm cấp độ 3</h3><div class="meta">⏱ 60 phút • Không bảo lãnh • Tịch thu tang vật theo luật máy chủ</div>
+        <ul><li><label style="display:flex;gap:9px;align-items:flex-start;cursor:pointer"><input class="crime-check" type="checkbox" style="margin-top:4px;accent-color:#1c3764"><span>Hành vi tấn công gây thương tích nghiêm trọng theo kịch bản roleplay</span></label></li><li><label style="display:flex;gap:9px;align-items:flex-start;cursor:pointer"><input class="crime-check" type="checkbox" style="margin-top:4px;accent-color:#1c3764"><span>Buôn bán vật phẩm bị cấm theo nội quy máy chủ</span></label></li></ul>
+      </article>
+      <article class="level" data-minutes="120" data-search="cấp độ 4 cán bộ nhân viên đe dọa báo chí">
+        <h3>Tội phạm cấp độ 4</h3><div class="meta">⏱ 120 phút • Không bảo lãnh • Tịch thu tang vật theo luật máy chủ</div>
+        <ul><li><label style="display:flex;gap:9px;align-items:flex-start;cursor:pointer"><input class="crime-check" type="checkbox" style="margin-top:4px;accent-color:#1c3764"><span>Tấn công cán bộ cấp cao trong kịch bản roleplay</span></label></li><li><label style="display:flex;gap:9px;align-items:flex-start;cursor:pointer"><input class="crime-check" type="checkbox" style="margin-top:4px;accent-color:#1c3764"><span>Tấn công nhân viên EMS</span></label></li><li><label style="display:flex;gap:9px;align-items:flex-start;cursor:pointer"><input class="crime-check" type="checkbox" style="margin-top:4px;accent-color:#1c3764"><span>Đe dọa nhân viên chính phủ</span></label></li><li><label style="display:flex;gap:9px;align-items:flex-start;cursor:pointer"><input class="crime-check" type="checkbox" style="margin-top:4px;accent-color:#1c3764"><span>Tấn công nhân viên báo chí</span></label></li></ul>
+      </article>
+      <article class="level" data-minutes="180" data-search="cấp độ 5 lợi dụng quyền tấn công thông đốc">
+        <h3>Tội phạm cấp độ 5</h3><div class="meta">⏱ 180 phút • Không bảo lãnh • Tịch thu tang vật theo luật máy chủ</div>
+        <ul><li><label style="display:flex;gap:9px;align-items:flex-start;cursor:pointer"><input class="crime-check" type="checkbox" style="margin-top:4px;accent-color:#1c3764"><span>Lợi dụng quyền hạn để bỏ trốn trong kịch bản roleplay</span></label></li><li><label style="display:flex;gap:9px;align-items:flex-start;cursor:pointer"><input class="crime-check" type="checkbox" style="margin-top:4px;accent-color:#1c3764"><span>Tấn công lãnh đạo hoặc nhân viên chính phủ trong kịch bản roleplay</span></label></li></ul>
+      </article>
+      <article class="level" data-minutes="200" data-search="cấp độ 6 bạo động thành phố tấn công trụ sở">
+        <h3>Tội phạm cấp độ 6</h3><div class="meta">⏱ 200 phút • Không bảo lãnh • Tịch thu tang vật theo luật máy chủ</div>
+        <ul><li><label style="display:flex;gap:9px;align-items:flex-start;cursor:pointer"><input class="crime-check" type="checkbox" style="margin-top:4px;accent-color:#1c3764"><span>Bạo động thành phố trong kịch bản roleplay</span></label></li><li><label style="display:flex;gap:9px;align-items:flex-start;cursor:pointer"><input class="crime-check" type="checkbox" style="margin-top:4px;accent-color:#1c3764"><span>Tấn công trụ sở hoặc nơi làm việc của cơ quan nhà nước trong kịch bản roleplay</span></label></li></ul>
+      </article>
+    </div>
+    <p id="empty" class="note hidden">Không tìm thấy nội dung phù hợp.</p>
+  </section>
+
+  <section id="rules">
+    <h2>Quy định chung</h2>
+    <div class="note">Đây là mẫu website dành cho máy chủ nhập vai. Quản trị viên nên cập nhật nội dung, thời gian xử lý và đường dẫn biểu mẫu theo nội quy chính thức của máy chủ. Không sử dụng bảng này để thay thế tư vấn pháp luật ngoài đời.</div>
+  </section>
+</main>
+<footer>© 2026 LSPD • Mẫu cổng thông tin roleplay • Có thể chỉnh sửa theo máy chủ của bạn</footer>
+<script>
+
+const LOGIN_USER = "huy thaidepzai";
+const LOGIN_PASS = "12345678";
+const loginScreen = document.getElementById("loginScreen");
+const loginForm = document.getElementById("loginForm");
+const loginError = document.getElementById("loginError");
+loginForm.addEventListener("submit", function(event) {
+  event.preventDefault();
+  const username = document.getElementById("loginUsername").value.trim();
+  const password = document.getElementById("loginPassword").value;
+  if (username === LOGIN_USER && password === LOGIN_PASS) {
+    loginScreen.style.display = "none";
+    document.body.style.overflow = "";
+  } else {
+    loginError.textContent = "Tên tài khoản hoặc mật khẩu không đúng.";
+  }
+});
+document.getElementById("logoutButton").addEventListener("click", function() {
+  loginScreen.style.display = "flex";
+  document.getElementById("loginPassword").value = "";
+  loginError.textContent = "";
+  window.scrollTo(0, 0);
+});
+
+const search=document.getElementById('search');
+const cards=[...document.querySelectorAll('.level')];
+const empty=document.getElementById('empty');
+const totalMinutes=document.getElementById('totalMinutes');
+const selectedCount=document.getElementById('selectedCount');
+const personName=document.getElementById('personName');
+const personId=document.getElementById('personId');
+const copyPreview=document.getElementById('copyPreview');
+function getReport(){
+ const selected=[...document.querySelectorAll('.crime-check:checked')];
+ const total=selected.reduce((sum,box)=>sum+(Number(box.closest('.level')?.dataset.minutes)||0),0);
+ const names=selected.map(box=>box.closest('label').querySelector('span').textContent.trim());
+ return {
+   selected,total,names,
+   text:`Tên: ${personName.value.trim() || 'Chưa nhập'}\nCCCD: ${personId.value.trim() || 'Chưa nhập'}\nTội danh:\n${names.length ? names.map((name,i)=>`${i+1}. ${name}`).join('\n') : 'Chưa chọn'}\nMức án: ${total} phút\nĐã xử lý:`
+ };
+}
+function updateTotal(){
+ const report=getReport();
+ totalMinutes.textContent=report.total;
+ selectedCount.textContent=`Đã chọn ${report.selected.length} tội danh`;
+ copyPreview.textContent=report.text;
+}
+async function copyText(value){
+ try{
+   if(navigator.clipboard && window.isSecureContext) await navigator.clipboard.writeText(value);
+   else {
+     const area=document.createElement('textarea');
+     area.value=value; area.style.position='fixed'; area.style.opacity='0';
+     document.body.appendChild(area); area.select();
+     const ok=document.execCommand('copy'); area.remove();
+     if(!ok) throw new Error('copy failed');
+   }
+   alert('Đã sao chép!');
+ }catch(e){alert('Không thể tự sao chép. Bạn hãy nhấn giữ phần nội dung rồi chọn Sao chép.');}
+}
+
+document.querySelectorAll('.crime-check').forEach(box=>box.addEventListener('change',updateTotal));
+personName.addEventListener('input',updateTotal);
+personId.addEventListener('input',updateTotal);
+document.getElementById('copyCrime').addEventListener('click',()=>{
+ const report=getReport();
+ const crimeText=report.names.length ? report.names.map((name,i)=>`${i+1}. ${name}`).join('\n') : 'Chưa chọn tội danh';
+ copyText(crimeText);
+});
+document.getElementById('copyAll').addEventListener('click',()=>copyText(getReport().text));
+document.getElementById('clearSelection').addEventListener('click',()=>{
+ document.querySelectorAll('.crime-check').forEach(box=>box.checked=false);
+ updateTotal();
+});
+
+search.addEventListener('input',()=>{
+ const q=search.value.trim().toLocaleLowerCase('vi');
+ let count=0;
+ cards.forEach(card=>{
+   const show=card.innerText.toLocaleLowerCase('vi').includes(q)||card.dataset.search.includes(q);
+   card.classList.toggle('hidden',!show); if(show) count++;
+ });
+ empty.classList.toggle('hidden',count!==0);
+});
+</script>
+</body>
+</html>
